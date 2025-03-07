@@ -22,5 +22,5 @@ data class Match(
 
 @Repository
 interface MatchRepository : JpaRepository<Match, Long> {
-    fun findAllByDateAfter(date: LocalDateTime): List<Match>
+    fun findByDateAfterAndEstTermineTrueOrderByDateDesc(date: LocalDateTime): List<Match>
 }
