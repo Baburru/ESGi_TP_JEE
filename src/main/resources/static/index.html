@@ -95,7 +95,7 @@
 
 
     function finishMatch(matchId) {
-        stompClient.send("/ws/finish", {}, JSON.stringify(matchId));
+        stompClient.send("/ws/finish", {}, JSON.stringify({ id: matchId }));
     }
 </script>
 </body>

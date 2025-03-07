@@ -58,7 +58,7 @@ class WebSocketController(private val messagingTemplate: SimpMessagingTemplate, 
         messagingTemplate.convertAndSend(CHANNEL_NAME, messageHistory)
     }
 
-    data class MatchId(val id:String)
+    data class MatchId(val id:String = "0")
 
     @MessageMapping("/finish")
     fun finishMatch(matchId: MatchId) {

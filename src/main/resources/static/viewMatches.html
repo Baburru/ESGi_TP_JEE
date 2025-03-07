@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Visualisation des Matches</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #matchList {
+            margin-top: 20px;
+        }
+
+        .match {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h2>Visualisation des Matches</h2>
+
+<h3>Matches en cours</h3>
+<div id="matchList"></div>
+
+<h3>Matches Terminés</h3>
+<div id="finishedMatchList"></div>
+
+<script src="https://cdn.jsdelivr.net/sockjs/latest/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+    let CHANNEL_NAME = "/ws/myChannel";
+    let stompClient = Stomp.over(new SockJS('/ws/chat-app'));
+
+    stompClient.connect({}, function () {
+        stompClient.subscribe(CHANNEL_NAME, function (messageOutput) {
+            let matches = JSON.parse(messageOutput.body);
+            updateMatchLists(matches);
+        });
+    });
+
+    function updateMatchLists(matches) {
+        let matchList = document.getElementById('matchList');
+        let finishedMatchList = document.getElementById('finishedMatchList');
+        matchList.innerHTML = '';
+        finishedMatchList.innerHTML = '';
+
+        matches.forEach(match => {
+            let matchElement = document.createElement('div');
+            matchElement.classList.add('match');
+
+            matchElement.innerHTML = `
+                <strong>${match.equipe1}</strong> vs <strong>${match.equipe2}</strong><br>
+                Score: ${match.scoreEquipe1} - ${match.scoreEquipe2}<br>
+                <img src="${match.photoUrl}" alt="Image du match" style="width: 100px; height: auto;">
+            `;
+
+            if (match.estTermine) {
+                finishedMatchList.appendChild(matchElement);
+            } else {
+                matchList.appendChild(matchElement);
+            }
+        });
+    }
+</script>
+</body>
+</html>
