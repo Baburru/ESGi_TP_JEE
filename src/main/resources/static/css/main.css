@@ -1,2 +1,44 @@
-h1 {    color: #0000FF; }
-h2 {    color: #FF0000; }
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h2, h3 {
+    color: #333;
+}
+
+#matchList, #finishedMatchList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.match {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.match:hover {
+    transform: translateY(-5px);
+}
+
+.match img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.match strong {
+    color: #2c3e50;
+    font-size: 1.1em;
+}
