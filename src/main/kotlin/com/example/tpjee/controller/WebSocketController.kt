@@ -49,6 +49,7 @@ class WebSocketController(private val messagingTemplate: SimpMessagingTemplate, 
             }
 
             println("Updated Score: ${existingMatch.scoreEquipe1} - ${existingMatch.scoreEquipe2}")
+            matchRepository.save(existingMatch)
         } else {
             println("Match not found!")
         }
@@ -57,15 +58,18 @@ class WebSocketController(private val messagingTemplate: SimpMessagingTemplate, 
         messagingTemplate.convertAndSend(CHANNEL_NAME, messageHistory)
     }
 
+    data class MatchId(val id:String)
+
     @MessageMapping("/finish")
-    fun finishMatch(matchUpdate: Match) {
-        println("Match terminé: ${matchUpdate.id}")
+    fun finishMatch(matchId: MatchId) {
+        println(matchId.id)
 
         // Récupère le match dans la BD
-        val existingMatch = matchRepository.findById(matchUpdate.id!!)
+        val existingMatch = matchRepository.findById(matchId.id.toLong())
             .orElse(null)
 
         if (existingMatch != null) {
+            println("Updated Match: ${existingMatch}")
             existingMatch.estTermine = true
             matchRepository.save(existingMatch) // Met à jour dans la BD
 
